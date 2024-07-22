@@ -85,7 +85,7 @@ class CameraNode (Node):
         self.counter_ = 0
         self.get_logger ().info("Hello XXXXXXXXXXXX Camera Node")
         self.create_timer (0.5, self.timer_callback)
-        self.publisher_ = self.create_publisher(URCommand, "custom_camera", 1)
+        self.publisher_ = self.create_publisher(URCommand, "custom_camera", 1) ------#creating a publisher for a specific topic
     
     def timer_callback(self):
         self.counter_ += 1    
@@ -143,16 +143,17 @@ class CameraNode (Node):
                     1
                 )
 
-                if len(objectBounds) > 0:
+                if len(objectBounds) > 0:-----------here xpoint, ypoint means the middle of the bounding box
                     xLeft = objectBounds[0][0]
                     xRight = objectBounds[0][2]
                     yTop = objectBounds[0][1]
                     yBottom = objectBounds[0][3]
                     xPoint = int(xLeft + (xRight-xLeft)/2)
                     yPoint = int(yTop + (yBottom-yTop)/2)
-                    # Przeliczenie punktu z obrazu rgb na rozdzielczość kamery głębi
-                    # Rozdzielczość kamery głębi: 640 x 400
-                    # Rozdzielczość kamery rgb: RESOLUTION_X x RESOLUTION_Y
+                    # Conversion of a point from the RGB image to the depth camera resolution
+                    # Depth camera resolution: 640 x 400
+                    # RGB camera resolution: RESOLUTION_X x RESOLUTION_Y
+
                     xForDepth = int(xPoint * 640 / RESOLUTION_X)
                     yForDepth = int(yPoint * 400 / RESOLUTION_Y)
                     cv2.circle(yoloFrame, (xPoint, yPoint), 2, (0, 0, 255), 5)
