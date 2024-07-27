@@ -5,14 +5,14 @@
 
 #include <memory>
 
-#include <moveit/move_group_interface/move_group_interface.h>
-#include <moveit_msgs/msg/collision_object.hpp>
-#include <moveit/planning_scene/planning_scene.h>
-#include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/move_group_interface/move_group_interface.h>  /*controlling robot motion*/
+#include <moveit_msgs/msg/collision_object.hpp>  /*For collision object messages*/
+#include <moveit/planning_scene/planning_scene.h> /*For the planning scene*/
+#include <moveit/planning_scene_interface/planning_scene_interface.h>  /*For interfacing with the planning scene*/
 #include "std_msgs/msg/string.hpp"
 
 #include "rclcpp/rclcpp.hpp"
-#include "ur_custom_interfaces/msg/ur_command.hpp"
+#include "ur_custom_interfaces/msg/ur_command.hpp"  /*For custom messages defined in the ur_custom_interfaces package*/
 using std::placeholders::_1;
 
 using namespace std::chrono_literals;
@@ -21,10 +21,12 @@ using moveit::planning_interface::MoveGroupInterface;
 /* This example creates a subclass of Node and uses std::bind() to register a
 * member function as a callback from the timer. */
 
+
 class RobotMasterController : public rclcpp::Node
 {
+/*The constructor for the RobotMasterController class, which initializes the node and sets up initial states*/
   public:
-    RobotMasterController(std::shared_ptr<rclcpp::Node> move_group_node, geometry_msgs::msg::Pose* lookout_pos, geometry_msgs::msg::Pose* apple_drop_pos)
+    RobotMasterController(std::shared_ptr<rclcpp::Node> move_group_node, geometry_msgs::msg::Pose* lookout_pos, geometry_msgs::msg::Pose* apple_drop_pos)  /*Initializing the pointers of the construct*/
     : Node("master_node"), is_lookout_position(false), is_horizontally_centered(false), 
     is_vertically_centered(false), is_moving(false), lookout_pos(lookout_pos), target_pose(*lookout_pos), prev_x(0),
     is_depth_reached(false), was_centered_message_shown(false), depth(0.0), apple_drop_pose(apple_drop_pos), is_at_apple_position(false), 
