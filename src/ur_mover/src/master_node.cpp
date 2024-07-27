@@ -223,7 +223,9 @@ class RobotMasterController : public rclcpp::Node
 
       /*If the item is grabbed and the robot is not moving, adjust the target position to pick the item. 
       If the movement is successful, set is_item_picked to true and log a success message. 
-      Otherwise, log an error message and shut down the node.*/
+      Otherwise, log an error message and shut down the node. target_pose.position.z += 0.03;: This increases
+      the z coordinate by 0.03 units, moving the end effector slightly upward.target_pose.position.y -= 0.07;:
+      This decreases the y coordinate by 0.07 units, moving the end effector slightly backward.*/
       // Picking the item
       if(is_item_grabbed && !is_moving){
         target_pose.position.z += 0.03;
