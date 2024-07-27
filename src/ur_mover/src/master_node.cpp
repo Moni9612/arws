@@ -252,6 +252,10 @@ class RobotMasterController : public rclcpp::Node
       }
           RCLCPP_INFO(this->get_logger(), "After going to lookout position with item");
 
+      /*If the robot is at the lookout position with the item and is not moving, move to the item drop position.
+      If the movement is successful, log a success message, wait for 1 second, publish a message to open the 
+      gripper, wait for 5 seconds, reset the robot loop, move back to the lookout position, and wait for 1 second.
+      If the movement is not successful, log an error message and shut down the node.*/
       // Moving to drop item position & dropping the item
       if(is_with_item_at_lookout_position && !is_moving){
         bool const item_lookout_pose_res = this->move(*item_drop_pose, "Moving to item drop position");
