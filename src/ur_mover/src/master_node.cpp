@@ -26,11 +26,12 @@ class RobotMasterController : public rclcpp::Node
 {
 /*The constructor for the RobotMasterController class, which initializes the node and sets up initial states*/
   public:
-    RobotMasterController(std::shared_ptr<rclcpp::Node> move_group_node, geometry_msgs::msg::Pose* lookout_pos, geometry_msgs::msg::Pose* item_drop_pos)  /*Initializing the pointers of the construct*/
+    RobotMasterController(std::shared_ptr<rclcpp::Node> move_group_node, geometry_msgs::msg::Pose* lookout_pos, geometry_msgs::msg::Pose* item_drop_pos)  
     : Node("master_node"), is_lookout_position(false), is_horizontally_centered(false), 
     is_vertically_centered(false), is_moving(false), lookout_pos(lookout_pos), target_pose(*lookout_pos), prev_x(0),
     is_depth_reached(false), was_centered_message_shown(false), depth(0.0), item_drop_pose(item_drop_pos), is_at_item_position(false), 
     is_item_grabbed(false), is_item_picked(false), is_with_item_at_lookout_position(false)
+    /*Initializing the pointers of the construct*/
     {
       RCLCPP_INFO(this->get_logger(), "Node started. Awaiting commands...");
       RCLCPP_INFO(this->get_logger(), "=======================================================");
@@ -67,7 +68,8 @@ class RobotMasterController : public rclcpp::Node
       int x = std::stoi(msg->x);
       int y = std::stoi(msg->y);
       if(!is_moving) {
-        depth = sanitize_depth(msg->depth);   /*The depth field is processed using a custom sanitize_depth function if the robot is not moving. The received command values are then logged.*/
+        depth = sanitize_depth(msg->depth);   /*The depth field is processed using a custom sanitize_depth function if the robot is not moving. 
+        The received command values are then logged.*/
       }
       RCLCPP_INFO(this->get_logger(), "Received commands: x:%i, y: %i, depth: %f", x, y, depth);
 
@@ -75,16 +77,23 @@ class RobotMasterController : public rclcpp::Node
       if(depth > 0.0 && depth < 0.7){
         depths.push_back(depth);
       }
-
+      
+      /*If the depth is reached and the robot is centered both horizontally and vertically, a message is logged indicating the robot is at
+      the item position, and the function returns.*/
       if(is_depth_reached && is_horizontally_centered && is_vertically_centered) {
         RCLCPP_INFO(this->get_logger(), "At item position");
         return;
       }
-      
+
+      /*If the robot is already moving or is not in the lookout position, a message is logged and the function returns*/
       if(is_moving || !is_lookout_position){
         RCLCPP_INFO(this->get_logger(), "Robot is already moving. Ignoring command.");
         return;
       }
+
+      /*If x is 0 and the robot is not already centered horizontally, a message is logged indicating the robot is already 
+      centered horizontally. The is_horizontally_centered flag is set to true, the is_moving flag is set to false, and
+       the robot's movement is stopped*/
       if(x == 0 && !is_horizontally_centered){
         RCLCPP_INFO(this->get_logger(), "Robot is already centered horizontally. Ignoring command.");
         is_horizontally_centered = true;
@@ -93,6 +102,10 @@ class RobotMasterController : public rclcpp::Node
         return;
       }
 
+      /*If x is 1 and the robot is not moving and is not centered horizontally, the robot's target position in the 
+      x-direction is incremented by 0.01, and a movement command is issued to move the robot to the right. If x is -1, 
+      the target position in the x-direction is decremented by 0.01, and a movement command is issued to move the robot 
+      to the left.*/
       if(x == 1 && !is_moving && !is_horizontally_centered){
         target_pose.position.x += 0.01;
         this->move(target_pose, "Moving robot to the right");
@@ -103,7 +116,7 @@ class RobotMasterController : public rclcpp::Node
       }
 
       // MOVING IN Y
-
+      /*If the robot is not centered horizontally, a message is logged and the function returns*/
       if(!is_horizontally_centered){
         RCLCPP_INFO(this->get_logger(), "Robot is not centered horizontally. Ignoring command.");
         return;
@@ -124,7 +137,11 @@ class RobotMasterController : public rclcpp::Node
         target_pose.position.z += 0.01;
         this->move(target_pose, "Moving robot to the top");
       }
-      
+
+      /*This block checks if the robot is centered both horizontally and vertically. If it is and a message 
+      indicating this has not yet been shown, a message is logged, was_centered_message_shown is set to true, 
+      and a 3-second timer is started. If the robot is not centered, the function returns. The current time 
+      is then updated.*/
       bool const is_robot_centered = is_horizontally_centered && is_vertically_centered;
       if(is_robot_centered && !was_centered_message_shown) {
         RCLCPP_INFO(this->get_logger(), "Robot is centered. Started timer.");
@@ -136,10 +153,13 @@ class RobotMasterController : public rclcpp::Node
       }
       timer = this->get_clock()->now();
 
+      /*If the current time is less than the end time of the timer, the function returns*/
       if(timer < end_timer) {
         return;
       }
 
+      /*If the depth is less than 0.01 or greater than 0.8, a message is logged indicating that the depth 
+      reading is out of range, and the function returns.*/
       if(depth < 0.01) {
         RCLCPP_INFO(this->get_logger(), "Depth too small. Awaiting another reading.");
         return;
@@ -149,9 +169,12 @@ class RobotMasterController : public rclcpp::Node
         return;
       }
 
+      /*If the robot is not moving and the depth has not been reached, proceed to the next block of code*/
       // Reaching the item
       if(!is_moving && !is_depth_reached) {
 
+        /*Apply a camera offset by adjusting the robot's target position in the z-direction. If the 
+        movement is successful, a message is logged. Otherwise, an error message is logged and the node is shut down*/
         // including camera offset
         target_pose.position.z += 0.18;
         bool const offset_res = this->move(target_pose, "Applying camera offset");
@@ -162,7 +185,10 @@ class RobotMasterController : public rclcpp::Node
           RCLCPP_INFO(this->get_logger(), "Could not apply camera offset. Shutting down.");
           rclcpp::shutdown();
         }
-        
+
+        /*Move the robot forward by adjusting the target position in the y-direction using the depth value, camera 
+        offset, and gripper offset. If the movement is successful, set is_depth_reached to true and log a success 
+        message. Otherwise, log an error message and shut down the node.*/
         RCLCPP_INFO(this->get_logger(), "Moving robot forward by %f", depth);
         float camera_offset = 0.11;
         float gripper_offset = 0.00;
@@ -182,6 +208,9 @@ class RobotMasterController : public rclcpp::Node
         }
       }
 
+      /*If the depth is reached and the apple is not yet grabbed, log a message, wait for 1 second, 
+      publish a message to close the gripper, wait for 5 seconds, log a message indicating the 
+      gripper is closed, and set is_item_grabbed to true.*/
       // Grabbing the item
       if(is_depth_reached && !is_item_grabbed){
         RCLCPP_INFO(this->get_logger(), "About to close gripper");
