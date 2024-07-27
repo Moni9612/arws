@@ -221,7 +221,9 @@ class RobotMasterController : public rclcpp::Node
         is_item_grabbed = true;
       }
 
-
+      /*If the item is grabbed and the robot is not moving, adjust the target position to pick the item. 
+      If the movement is successful, set is_item_picked to true and log a success message. 
+      Otherwise, log an error message and shut down the node.*/
       // Picking the item
       if(is_item_grabbed && !is_moving){
         target_pose.position.z += 0.03;
@@ -237,6 +239,10 @@ class RobotMasterController : public rclcpp::Node
         }
       }
 
+      /*Log a message before moving to the lookout position with the item. If the item is picked and 
+      the robot is not moving, move to the lookout position, log a success message, and set 
+      is_with_item_at_lookout_position to true. Log another message after moving to the lookout position.*/
+      
           RCLCPP_INFO(this->get_logger(), "Before going to lookout position with item");
       // Going back to lookout position with item
       if(is_item_picked && !is_moving){
