@@ -193,7 +193,7 @@ class RobotMasterController : public rclcpp::Node
         float camera_offset = 0.11;
         float gripper_offset = 0.00;
         target_pose.position.y += depth - camera_offset - gripper_offset;
-        // shouldn't be hardcoded - offset in x when reaching item
+        // shouldn't be hardcoded - offset in x when reaching item. we might not need this value.
         target_pose.position.x -= 0.03;
 
         bool const forward_res = this->move(target_pose, "Moving robot forward");
