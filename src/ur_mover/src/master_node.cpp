@@ -449,7 +449,7 @@ int main(int argc, char * argv[])
   item_drop_pos.position.z = 0.561635-0.15;
 
 
-  rclcpp::init(argc, argv);
+  rclcpp::init(argc, argv); /*initializes the ROS 2 system with command-line arguments.*/
   rclcpp::NodeOptions node_options;
   node_options.automatically_declare_parameters_from_overrides(true);
 
