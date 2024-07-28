@@ -413,16 +413,18 @@ It takes a single argument, raw_depth, which is a string representation of the d
     bool is_with_item_at_lookout_position;
     int prev_x;
     bool was_centered_message_shown;
-    float depth;
-    std::vector<float> depths;
-    rclcpp::Time end_timer;
-    rclcpp::Time timer;
+    float depth;  /*Stores the current depth (distance) value. */
+    std::vector<float> depths; /*A vector of float values representing multiple depth measurements.
+    This might be used for averaging depths or other calculations.*/
+    rclcpp::Time end_timer;  /*Stores the end time for a timer. This might be used for timing operations or delays.*/
+    rclcpp::Time timer;  /*Stores the start time for a timer. This might be used for timing operations or delays.*/
     geometry_msgs::msg::Pose* lookout_pos;
     geometry_msgs::msg::Pose* item_drop_pose;
     moveit::planning_interface::MoveGroupInterface* move_group_;
-    geometry_msgs::msg::Pose target_pose;
+    geometry_msgs::msg::Pose target_pose; /*Represents the target pose (position and orientation) the robot should move to.*/
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher;
-    std::vector<geometry_msgs::msg::Pose> waypoints;
+    std::vector<geometry_msgs::msg::Pose> waypoints;  /*A vector of poses representing waypoints. These are used for moving 
+    the robot through a sequence of positions.*/
 };
 
 int main(int argc, char * argv[])
