@@ -332,17 +332,31 @@ It takes a single argument, raw_depth, which is a string representation of the d
       /*If depth is greater than 0.8, it is set to 0.8. This ensures the depth does not exceed 0.8 meters */
     }
 
+    /*This code defines two overloaded move functions for moving a robot using the MoveIt! library in ROS 2. 
+    These functions are responsible for planning and executing a Cartesian path to reach a target pose or a series 
+    of target poses. */
+
+    /*Single Pose move Function*/
+
     bool move(geometry_msgs::msg::Pose target_pose, const char * log_message = "Moving robot"){
       is_moving = true;
       moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+      /*moveit::planning_interface::MoveGroupInterface::Plan my_plan;: Creates a plan object to store the trajectory*/
       move_group_->setEndEffectorLink("wrist_3_link");
+      /*Sets the end-effector link for the robot's manipulator.*/
 
-      double eef_step = 0.01; // Rozdzielczość trajektorii
+      double eef_step = 0.01; // Trajectory resolution
+      /*Sets the resolution of the trajectory, defining the step size for the Cartesian path.*/
       auto res = move_group_->computeCartesianPath(std::vector<geometry_msgs::msg::Pose> {target_pose}, eef_step, 0.0, my_plan.trajectory_);
+      /*Computes the Cartesian path to the target pose. Sets eef_step to 0.01. Calls computeCartesianPath with a single
+      target_pose (wrapped in a vector).*/
       RCLCPP_INFO(this->get_logger(), log_message);
 
+      /*logging and execution*/
+      /*Checks if the planning was successful*/
       if (res != -1) {
         auto move_res = move_group_->execute(my_plan);
+        /*Executes the planned trajectory.*/
           if(move_res == moveit::planning_interface::MoveItErrorCode::SUCCESS){
             is_moving = false;
             RCLCPP_INFO(this->get_logger(), "Execution successful for the waypoint.");
@@ -357,6 +371,8 @@ It takes a single argument, raw_depth, which is a string representation of the d
         return false;
     }
 
+    /*Multiple Poses move Function*/
+
     bool move(std::vector<geometry_msgs::msg::Pose> target_poses, const char * log_message = "Moving robot"){
       is_moving = true;
       moveit::planning_interface::MoveGroupInterface::Plan my_plan;
@@ -364,8 +380,11 @@ It takes a single argument, raw_depth, which is a string representation of the d
 
       double eef_step = 0.01; // Rozdzielczość trajektorii
       auto res = move_group_->computeCartesianPath(target_poses, eef_step, 0.0, my_plan.trajectory_);
+      /*Computes the Cartesian path to a series of target poses. Sets eef_step to 0.01. Calls computeCartesianPath with 
+      a vector of target_poses. */
       RCLCPP_INFO(this->get_logger(), log_message);
 
+      /*Same as the single pose move function, but operates on a series of target poses instead of a single target pose.*/
       if (res != -1) {
         auto move_res = move_group_->execute(my_plan);
           if(move_res == moveit::planning_interface::MoveItErrorCode::SUCCESS){
