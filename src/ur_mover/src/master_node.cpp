@@ -279,6 +279,8 @@ class RobotMasterController : public rclcpp::Node
       }
     }
 
+    /*This function is a member function of the RobotMasterController class. It is responsible for moving the robot to a 
+    predefined "lookout position."*/
     void move_to_lookout_position(){
       RCLCPP_INFO(this->get_logger(), "=======================================================");
       bool const move_res = move(*lookout_pos, "Moving to lookout position");
@@ -293,6 +295,9 @@ class RobotMasterController : public rclcpp::Node
 
     }
 
+    /*This function is designed to reset the state of the RobotMasterController object and return the robot to its initial 
+    lookout position. It resets various state variables of the robot controller and moves the robot back to the lookout 
+    position.*/
     void reset_robot_loop(){
       is_lookout_position = false;
       is_horizontally_centered = false;
@@ -304,11 +309,17 @@ class RobotMasterController : public rclcpp::Node
       is_item_picked = false;
       is_with_item_at_lookout_position = false;
       was_centered_message_shown = false;
+      /*depths is presumably a container (e.g., std::vector) holding depth measurements. clear() empties this container, 
+      resetting any stored depth data.*/
       depths.clear();
+      /*prev_x keeps track of the previous horizontal position. Reset to 0 to clear any previous position data.*/
       prev_x = 0;
       this->move_to_lookout_position();
     }
 
+    /*This function takes a raw depth value as a string, converts it to a floating-point number, normalizes it, 
+    and then clamps it within a specific range. This function is a member function of the RobotMasterController class.
+It takes a single argument, raw_depth, which is a string representation of the depth value.*/
     float sanitize_depth(std::string raw_depth){
       float depth = std::stof(raw_depth) / 1000;
       if(depth > 0.8){
@@ -318,6 +329,7 @@ class RobotMasterController : public rclcpp::Node
         depth = 0;
       }
       return depth;
+      /*If depth is greater than 0.8, it is set to 0.8. This ensures the depth does not exceed 0.8 meters */
     }
 
     bool move(geometry_msgs::msg::Pose target_pose, const char * log_message = "Moving robot"){
