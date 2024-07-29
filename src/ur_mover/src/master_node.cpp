@@ -176,7 +176,7 @@ class RobotMasterController : public rclcpp::Node
         /*Apply a camera offset by adjusting the robot's target position in the z-direction. If the 
         movement is successful, a message is logged. Otherwise, an error message is logged and the node is shut down*/
         // including camera offset
-        target_pose.position.z += 0.18;
+        target_pose.position.z += 0.06;
         bool const offset_res = this->move(target_pose, "Applying camera offset");
         if(offset_res){
           RCLCPP_INFO(this->get_logger(), "Applied camera offset");
@@ -190,7 +190,7 @@ class RobotMasterController : public rclcpp::Node
         offset, and gripper offset. If the movement is successful, set is_depth_reached to true and log a success 
         message. Otherwise, log an error message and shut down the node.*/
         RCLCPP_INFO(this->get_logger(), "Moving robot forward by %f", depth);
-        float camera_offset = 0.11;
+        float camera_offset = 0.03;
         float gripper_offset = 0.00;
         target_pose.position.y += depth - camera_offset - gripper_offset;
         // shouldn't be hardcoded - offset in x when reaching item. we might not need this value.
@@ -431,22 +431,22 @@ int main(int argc, char * argv[])
 {
 
     geometry_msgs::msg::Pose lookout_pos;
-  lookout_pos.orientation.w = 0.700288;
-  lookout_pos.orientation.x = -0.713574;
-  lookout_pos.orientation.y = 0.002969;
-  lookout_pos.orientation.z = -0.019990;
-  lookout_pos.position.x = -0.131775;
-  lookout_pos.position.y = -0.127100;
-  lookout_pos.position.z = 0.571933-0.15;
+  lookout_pos.orientation.w = 0.00029;
+  lookout_pos.orientation.x = 0.902654;
+  lookout_pos.orientation.y = 0.430145;
+  lookout_pos.orientation.z = -0.0128905;
+  lookout_pos.position.x = 0.663481;
+  lookout_pos.position.y = 0.392979;
+  lookout_pos.position.z = 0.616589;
 
     geometry_msgs::msg::Pose item_drop_pos;
-  item_drop_pos.orientation.w = 0.475287;
-  item_drop_pos.orientation.x = -0.504723;
-  item_drop_pos.orientation.y = -0.495298;
-  item_drop_pos.orientation.z = 0.523485;
-  item_drop_pos.position.x = -0.229409;
-  item_drop_pos.position.y = -0.251604;
-  item_drop_pos.position.z = 0.561635-0.15;
+  item_drop_pos.orientation.w = -0.005963;
+  item_drop_pos.orientation.x = 0.751809;
+  item_drop_pos.orientation.y = 0.659346;
+  item_drop_pos.orientation.z = 0.002643;
+  item_drop_pos.position.x = 0.379865;
+  item_drop_pos.position.y = 0.753293;
+  item_drop_pos.position.z = 0.532143;
 
 
   rclcpp::init(argc, argv); /*initializes the ROS 2 system with command-line arguments.*/
@@ -461,4 +461,4 @@ int main(int argc, char * argv[])
   rclcpp::spin(std::make_shared<RobotMasterController>(move_robot_node, &lookout_pos, &item_drop_pos));
   rclcpp::shutdown();
   return 0;
-}
+}  
