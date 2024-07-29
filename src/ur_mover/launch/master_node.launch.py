@@ -20,7 +20,8 @@ def load_yaml(package_name, file_path):
     except EnvironmentError:
         # parent of IOError, OSError *and* WindowsError where available.
         return None
-    
+        
+#Generates a robot_description parameter by using xacro to process a URDF file with various parameters.    
 def get_robot_description():
     joint_limit_params = PathJoinSubstitution(
         [FindPackageShare("ur_description"), "config", "ur3e", "joint_limits.yaml"]
