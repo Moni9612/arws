@@ -24,16 +24,16 @@ def load_yaml(package_name, file_path):
 #Generates a robot_description parameter by using xacro to process a URDF file with various parameters.    
 def get_robot_description():
     joint_limit_params = PathJoinSubstitution(
-        [FindPackageShare("ur_description"), "config", "ur3e", "joint_limits.yaml"]
+        [FindPackageShare("ur_description"), "config", "ur10", "joint_limits.yaml"]
     )
     kinematics_params = PathJoinSubstitution(
-        [FindPackageShare("ur_description"), "config", "ur3e", "default_kinematics.yaml"]
+        [FindPackageShare("ur_description"), "config", "ur10", "default_kinematics.yaml"]
     )
     physical_params = PathJoinSubstitution(
-        [FindPackageShare("ur_description"), "config", "ur3e", "physical_parameters.yaml"]
+        [FindPackageShare("ur_description"), "config", "ur10", "physical_parameters.yaml"]
     )
     visual_params = PathJoinSubstitution(
-        [FindPackageShare("ur_description"), "config", "ur3e", "visual_parameters.yaml"]
+        [FindPackageShare("ur_description"), "config", "ur10", "visual_parameters.yaml"]
     )
     robot_description_content = Command(
         [
@@ -41,7 +41,7 @@ def get_robot_description():
             " ",
             PathJoinSubstitution([FindPackageShare("ur_description"), "urdf", "ur.urdf.xacro"]),
             " ",
-            "robot_ip:=172.17.0.2",
+            "robot_ip:=10.0.0.89",
             " ",
             "joint_limit_params:=",
             joint_limit_params,
@@ -68,7 +68,7 @@ def get_robot_description():
             "ur",
             " ",
             "ur_type:=",
-            "ur3e",
+            "ur10",
             " ",
             "prefix:=",
             '""',
@@ -139,16 +139,7 @@ def generate_launch_description():
         "-0.2",
         "0.1",
     ]
-    arguments2 = [
-        "argument1 to arg przykladowy do stringa",
-        "0.0",
-        "0.0",
-        "0.0",
-        "0.0",
-        "-0.2",
-        "0.2",
-        "0.1",
-    ]
+    
 
     demo_node1 = Node(
         package="ur_mover",
