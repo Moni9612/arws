@@ -281,6 +281,23 @@ int main(int argc, char* argv[]) {
   geometry_msgs::msg::Pose lookout_pose, item_drop_pose;
 
   // Initialize lookout_pose and item_drop_pose with your desired values
+    geometry_msgs::msg::Pose lookout_pos;
+  lookout_pos.orientation.w = 0.00029;
+  lookout_pos.orientation.x = 0.902654;
+  lookout_pos.orientation.y = 0.430145;
+  lookout_pos.orientation.z = -0.0128905;
+  lookout_pos.position.x = 0.663481;
+  lookout_pos.position.y = 0.392979;
+  lookout_pos.position.z = 0.616589;
+
+    geometry_msgs::msg::Pose item_drop_pos;
+  item_drop_pos.orientation.w = -0.005963;
+  item_drop_pos.orientation.x = 0.751809;
+  item_drop_pos.orientation.y = 0.659346;
+  item_drop_pos.orientation.z = 0.002643;
+  item_drop_pos.position.x = 0.379865;
+  item_drop_pos.position.y = 0.753293;
+  item_drop_pos.position.z = 0.532143;
   
 
   auto const master_node = std::make_shared<RobotMasterController>(move_group_node, &lookout_pose, &item_drop_pose);
