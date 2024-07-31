@@ -321,7 +321,7 @@ class RobotMasterController : public rclcpp::Node
     and then clamps it within a specific range. This function is a member function of the RobotMasterController class.
 It takes a single argument, raw_depth, which is a string representation of the depth value.*/
     float sanitize_depth(std::string raw_depth){
-      float depth = std::stof(raw_depth) / 1000;
+      float depth = std::stof(raw_depth) ;
       if(depth > 0.8){
         depth = 0.8;
       }
