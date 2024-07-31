@@ -3,8 +3,6 @@
 #include <memory>
 #include <string>
 
-#include <memory>
-
 #include <moveit/move_group_interface/move_group_interface.h>  /*controlling robot motion*/
 #include <moveit_msgs/msg/collision_object.hpp>  /*For collision object messages*/
 #include <moveit/planning_scene/planning_scene.h> /*For the planning scene*/
@@ -107,11 +105,11 @@ class RobotMasterController : public rclcpp::Node
       the target position in the x-direction is decremented by 0.01, and a movement command is issued to move the robot 
       to the left.*/
       if(x == 1 && !is_moving && !is_horizontally_centered){
-        target_pose.position.x += 0.01;
+        target_pose.position.x -= 0.01;
         this->move(target_pose, "Moving robot to the right");
 
       } else if(x == -1 && !is_moving && !is_horizontally_centered){
-        target_pose.position.x -= 0.01;
+        target_pose.position.x += 0.01;
         this->move(target_pose, "Moving robot to the left");
       }
 
@@ -131,10 +129,10 @@ class RobotMasterController : public rclcpp::Node
       }
 
       if(y == 1 && !is_moving && !is_vertically_centered){
-        target_pose.position.z -= 0.01;
+        target_pose.position.y += 0.01;
         this->move(target_pose, "Moving robot to the bottom");
       } else if(y == -1 && !is_moving && !is_vertically_centered){
-        target_pose.position.z += 0.01;
+        target_pose.position.y -= 0.01;
         this->move(target_pose, "Moving robot to the top");
       }
 
@@ -176,7 +174,7 @@ class RobotMasterController : public rclcpp::Node
         /*Apply a camera offset by adjusting the robot's target position in the z-direction. If the 
         movement is successful, a message is logged. Otherwise, an error message is logged and the node is shut down*/
         // including camera offset
-        target_pose.position.z += 0.06;
+        target_pose.position.y -= 0.06;
         bool const offset_res = this->move(target_pose, "Applying camera offset");
         if(offset_res){
           RCLCPP_INFO(this->get_logger(), "Applied camera offset");
@@ -192,9 +190,9 @@ class RobotMasterController : public rclcpp::Node
         RCLCPP_INFO(this->get_logger(), "Moving robot forward by %f", depth);
         float camera_offset = 0.03;
         float gripper_offset = 0.00;
-        target_pose.position.y += depth - camera_offset - gripper_offset;
+        target_pose.position.z -= depth - camera_offset - gripper_offset;
         // shouldn't be hardcoded - offset in x when reaching item. we might not need this value.
-        target_pose.position.x -= 0.03;
+        target_pose.position.x += 0.03;
 
         bool const forward_res = this->move(target_pose, "Moving robot forward");
 
@@ -228,8 +226,8 @@ class RobotMasterController : public rclcpp::Node
       This decreases the y coordinate by 0.07 units, moving the end effector slightly backward.*/
       // Picking the item
       if(is_item_grabbed && !is_moving){
-        target_pose.position.z += 0.03;
-        target_pose.position.y -= 0.07;
+        target_pose.position.y -= 0.03;
+        target_pose.position.z += 0.07;
         bool const backward_res = this->move(target_pose, "Picking the item");
         if(backward_res){
           is_item_picked = true;
@@ -321,7 +319,7 @@ class RobotMasterController : public rclcpp::Node
     and then clamps it within a specific range. This function is a member function of the RobotMasterController class.
 It takes a single argument, raw_depth, which is a string representation of the depth value.*/
     float sanitize_depth(std::string raw_depth){
-      float depth = std::stof(raw_depth) / 1000;
+      float depth = std::stof(raw_depth) ;
       if(depth > 0.8){
         depth = 0.8;
       }
@@ -431,22 +429,22 @@ int main(int argc, char * argv[])
 {
 
     geometry_msgs::msg::Pose lookout_pos;
-  lookout_pos.orientation.w = 0.00029;
-  lookout_pos.orientation.x = 0.902654;
-  lookout_pos.orientation.y = 0.430145;
-  lookout_pos.orientation.z = -0.0128905;
-  lookout_pos.position.x = 0.663481;
-  lookout_pos.position.y = 0.392979;
-  lookout_pos.position.z = 0.616589;
+  lookout_pos.orientation.w = 0.0001;
+  lookout_pos.orientation.x = 0.8974;
+  lookout_pos.orientation.y = 0.4407;
+  lookout_pos.orientation.z = -0.0192;
+  lookout_pos.position.x = 0.6470;
+  lookout_pos.position.y = 0.5490;
+  lookout_pos.position.z = 0.7020;
 
     geometry_msgs::msg::Pose item_drop_pos;
-  item_drop_pos.orientation.w = -0.005963;
-  item_drop_pos.orientation.x = 0.751809;
-  item_drop_pos.orientation.y = 0.659346;
-  item_drop_pos.orientation.z = 0.002643;
-  item_drop_pos.position.x = 0.379865;
-  item_drop_pos.position.y = 0.753293;
-  item_drop_pos.position.z = 0.532143;
+  item_drop_pos.orientation.w = 0.0001;
+  item_drop_pos.orientation.x = 0.8974;
+  item_drop_pos.orientation.y = 0.4407;
+  item_drop_pos.orientation.z = -0.0192;
+  item_drop_pos.position.x = 0.4572;
+  item_drop_pos.position.y = 0.6961;
+  item_drop_pos.position.z = 0.7061;
 
 
   rclcpp::init(argc, argv); /*initializes the ROS 2 system with command-line arguments.*/
@@ -462,3 +460,5 @@ int main(int argc, char * argv[])
   rclcpp::shutdown();
   return 0;
 }  
+
+
