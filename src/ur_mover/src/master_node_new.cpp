@@ -192,7 +192,7 @@ class RobotMasterController : public rclcpp::Node
         RCLCPP_INFO(this->get_logger(), "Moving robot forward by %f", depth);
         float camera_offset = 0.03;
         float gripper_offset = 0.00;
-        target_pose.position.z += depth - camera_offset - gripper_offset;
+        target_pose.position.y += depth - camera_offset - gripper_offset;
         // shouldn't be hardcoded - offset in x when reaching item. we might not need this value.
         target_pose.position.x -= 0.03;
 
@@ -228,8 +228,8 @@ class RobotMasterController : public rclcpp::Node
       This decreases the y coordinate by 0.07 units, moving the end effector slightly backward.*/
       // Picking the item
       if(is_item_grabbed && !is_moving){
-        target_pose.position.x += 0.03;
-        target_pose.position.z -= 0.07;
+        target_pose.position.z += 0.03;
+        target_pose.position.y -= 0.07;
         bool const backward_res = this->move(target_pose, "Picking the item");
         if(backward_res){
           is_item_picked = true;
