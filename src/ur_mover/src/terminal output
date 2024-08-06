@@ -1,0 +1,102 @@
+superuniversal@grapple-001:~/rg2_ws$ ros2 launch ur_mover master_node.launch.py
+[INFO] [launch]: All log files can be found below /home/superuniversal/.ros/log/2024-08-06-12-41-12-702633-grapple-001-50477
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [master_node-1]: process started with pid [50480]
+[master_node-1] [WARN] [1722912073.291666725] [rcl.logging_rosout]: Publisher already registered for provided node name. If this is due to multiple nodes with the same name then all logs for that logger name will go out over the existing publisher. As soon as any node with that name is destructed it will unregister the publisher, preventing any further logs for that name from being published on the rosout topic.
+[master_node-1] [INFO] [1722912073.294742762] [master_node]: Node started. Awaiting commands...
+[master_node-1] [INFO] [1722912073.294857591] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912073.294874342] [master_node]: SETUP LOGS
+[master_node-1] [INFO] [1722912073.294885478] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912073.295500600] [master_node]: Subscribed to /custom_camera topic
+[master_node-1] [INFO] [1722912073.296528052] [master_node]: Publisher on custom_gripper created
+[master_node-1] [INFO] [1722912073.300436909] [moveit_rdf_loader.rdf_loader]: Loaded robot model in 0.0036721 seconds
+[master_node-1] [INFO] [1722912073.300471781] [moveit_robot_model.robot_model]: Loading robot model 'ur'...
+[master_node-1] [INFO] [1722912073.300482090] [moveit_robot_model.robot_model]: No root/virtual joint specified in SRDF. Assuming fixed joint
+[master_node-1] [INFO] [1722912075.609435880] [move_group_interface]: Ready to take commands for planning group ur_manipulator.
+[master_node-1] [INFO] [1722912075.610534570] [moveit_ros.current_state_monitor]: Listening to joint states on topic 'joint_states'
+[master_node-1] [INFO] [1722912075.611948682] [master_node]: Robot position: 0.792505, -0.129583, 0.655393
+[master_node-1] [INFO] [1722912075.611984306] [master_node]: Robot rotation: 0.996562, -0.081166, 0.013537, -0.009604
+[master_node-1] [INFO] [1722912075.611999153] [master_node]: Lookout position: 0.792500, -0.129500, 0.655300
+[master_node-1] [INFO] [1722912075.612009253] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912075.621516238] [master_node]: Moving to lookout position
+[master_node-1] [INFO] [1722912075.622435587] [move_group_interface]: Execute request accepted
+[master_node-1] [INFO] [1722912075.700335799] [move_group_interface]: Execute request success!
+[master_node-1] [INFO] [1722912075.700726135] [master_node]: Execution successful for the waypoint.
+[master_node-1] [INFO] [1722912075.700764830] [master_node]: Arrived at lookout position.
+[master_node-1] [INFO] [1722912075.700890242] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912075.700910792] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912075.700926309] [master_node]: Robot is already centered horizontally. Ignoring command.
+[master_node-1] [INFO] [1722912075.803231467] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912075.803264316] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912075.803281050] [master_node]: Robot is already centered vertically. Ignoring command.
+[master_node-1] [INFO] [1722912076.077211253] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912076.077245383] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912076.077262389] [master_node]: Robot is centered. Started timer.
+[master_node-1] [INFO] [1722912076.220304135] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912076.220346613] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912076.359354209] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912076.359407091] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912076.501603245] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912076.501634600] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912076.782763821] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912076.782794553] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912076.925602985] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912076.925634090] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912077.072460735] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.072526800] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912077.217336540] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.217372647] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912077.368659001] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.368690788] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912077.512506572] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.512544300] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912077.660420502] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.660454254] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912077.800726769] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.800757067] [master_node]: Received commands: x:0, y: 0, depth: 0.477000
+[master_node-1] [INFO] [1722912077.939946443] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912077.939978430] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.076594985] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.076627909] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.218500236] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.218533795] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.362677355] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.362723176] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.510335169] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.510367305] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.649280250] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.649343331] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.784598630] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.784628797] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912078.923241976] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912078.923286176] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912079.060969819] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912079.061005845] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912079.334980514] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912079.335015767] [master_node]: Received commands: x:0, y: 0, depth: 0.476000
+[master_node-1] [INFO] [1722912079.345972982] [master_node]: Applying camera offset
+[master_node-1] [INFO] [1722912079.346483718] [move_group_interface]: Execute request accepted
+[master_node-1] [INFO] [1722912079.420621636] [move_group_interface]: Execute request success!
+[master_node-1] [INFO] [1722912079.420971296] [master_node]: Execution successful for the waypoint.
+[master_node-1] [INFO] [1722912079.421000953] [master_node]: Applied camera offset
+[master_node-1] [INFO] [1722912079.421013581] [master_node]: Moving robot down by 0.476000
+[master_node-1] [INFO] [1722912079.432327327] [master_node]: Moving robot down
+[master_node-1] [INFO] [1722912079.432778743] [move_group_interface]: Execute request accepted
+[master_node-1] [INFO] [1722912079.804726102] [move_group_interface]: Execute request success!
+[master_node-1] [INFO] [1722912079.805436326] [master_node]: Execution successful for the waypoint.
+[master_node-1] [INFO] [1722912079.805491199] [master_node]: Arrived at item position.
+[master_node-1] [INFO] [1722912079.805509257] [master_node]: About to close gripper
+[master_node-1] [INFO] [1722912085.805684096] [master_node]: Gripper closed
+[master_node-1] [INFO] [1722912085.805725871] [master_node]: Before going to lookout position with item
+[master_node-1] [INFO] [1722912085.805738750] [master_node]: =======================================================
+[master_node-1] [INFO] [1722912085.816735936] [master_node]: Moving to lookout position
+[master_node-1] [INFO] [1722912085.817827151] [move_group_interface]: Execute request accepted
+[master_node-1] [INFO] [1722912085.988729071] [move_group_interface]: Execute request success!
+[master_node-1] [INFO] [1722912085.989305790] [master_node]: Execution successful for the waypoint.
+[master_node-1] [INFO] [1722912085.989344765] [master_node]: Arrived at lookout position.
+[master_node-1] [INFO] [1722912085.989358353] [master_node]: Going to lookout position
+[master_node-1] [INFO] [1722912085.989368739] [master_node]: After going to lookout position with item
+[master_node-1] [INFO] [1722912086.026490962] [master_node]: Moving to item drop position
+[master_node-1] [INFO] [1722912086.027106640] [move_group_interface]: Execute request accepted
+^C[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[master_node-1] [INFO] [1722912093.964790771] [rclcpp]: signal_handler(signum=2)
