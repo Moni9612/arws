@@ -28,8 +28,8 @@ class RobotMasterController : public rclcpp::Node
   public:
     RobotMasterController(std::shared_ptr<rclcpp::Node> move_group_node, geometry_msgs::msg::Pose* lookout_pos, geometry_msgs::msg::Pose* item_drop_pos)  
     : Node("master_node"), is_lookout_position(false), is_horizontally_centered(false), 
-    is_vertically_centered(false), is_moving(false), lookout_pos(lookout_pos), target_pose(*lookout_pos), prev_x(0),
-    is_depth_reached(false), was_centered_message_shown(false), depth(0.0), item_drop_pose(item_drop_pos), is_at_item_position(false), 
+    is_vertically_centered(false), is_moving(false), lookout_pos(lookout_pos), target_pose(*lookout_pos), //prev_x(0),
+    is_depth_reached(false), was_centered_message_shown(false), depth(0.0), item_drop_pose(item_drop_pos), //is_at_item_position(false), 
     is_item_grabbed(false), is_item_picked(false), is_with_item_at_lookout_position(false)
     /*Initializing the pointers of the construct*/
     {
@@ -191,8 +191,8 @@ class RobotMasterController : public rclcpp::Node
         message. Otherwise, log an error message and shut down the node.*/
         RCLCPP_INFO(this->get_logger(), "Moving robot down by %f", depth);
         float camera_offset = 0.03;
-        float gripper_offset = 0.00;
-        target_pose.position.z -= depth;
+        //float gripper_offset = 0.00;
+        target_pose.position.z -= depth - camera_offset ;
         // shouldn't be hardcoded - offset in x when reaching item. we might not need this value.
         //target_pose.position.x -= 0.03;
 
@@ -225,8 +225,8 @@ class RobotMasterController : public rclcpp::Node
       If the movement is successful, set is_item_picked to true and log a success message. 
       Otherwise, log an error message and shut down the node. target_pose.position.z += 0.03;: This increases
       the z coordinate by 0.03 units, moving the end effector slightly upward.target_pose.position.y -= 0.07;:
-      This decreases the y coordinate by 0.07 units, moving the end effector slightly backward.*/
-      // Picking the item
+      This decreases the y coordinate by 0.07 units, moving the end effector slightly backward.
+      Picking the item
       if(is_item_grabbed && !is_moving){
         target_pose.position.z += 0.06;
         target_pose.position.y -= 0.07;
@@ -239,7 +239,8 @@ class RobotMasterController : public rclcpp::Node
           RCLCPP_INFO(this->get_logger(), "Could not pick an item. Shutting down.");
           rclcpp::shutdown();
         }
-      }
+      } 
+      */
 
       /*Log a message before moving to the lookout position with the item. If the item is picked and 
       the robot is not moving, move to the lookout position, log a success message, and set 
@@ -247,7 +248,7 @@ class RobotMasterController : public rclcpp::Node
       
           RCLCPP_INFO(this->get_logger(), "Before going to lookout position with item");
       // Going back to lookout position with item
-      if(is_item_picked && !is_moving){
+      if(is_item_grabbed && !is_moving){
         this->move_to_lookout_position();
           RCLCPP_INFO(this->get_logger(), "Going to lookout position");
         is_with_item_at_lookout_position = true;
@@ -268,8 +269,9 @@ class RobotMasterController : public rclcpp::Node
           publisher->publish(std_msgs::msg::String().set__data("open"));
           rclcpp::sleep_for(5s);
           reset_robot_loop();
+          rclcpp::sleep_for(5s);
           this->move_to_lookout_position();
-          target_pose = *lookout_pos;
+          //target_pose = *lookout_pos;
           rclcpp::sleep_for(1s);
         }
         else {
@@ -304,17 +306,17 @@ class RobotMasterController : public rclcpp::Node
       is_vertically_centered = false;
       is_moving = false;
       is_depth_reached = false;
-      is_at_item_position = false;
+      //is_at_item_position = false;
       is_item_grabbed = false;
-      is_item_picked = false;
+      //is_item_picked = false;
       is_with_item_at_lookout_position = false;
       was_centered_message_shown = false;
       /*depths is presumably a container (e.g., std::vector) holding depth measurements. clear() empties this container, 
       resetting any stored depth data.*/
       depths.clear();
       /*prev_x keeps track of the previous horizontal position. Reset to 0 to clear any previous position data.*/
-      prev_x = 0;
-      this->move_to_lookout_position();
+      //prev_x = 0;
+     // this->move_to_lookout_position();
     }
 
     /*This function takes a raw depth value as a string, converts it to a floating-point number, normalizes it, 
@@ -371,7 +373,7 @@ It takes a single argument, raw_depth, which is a string representation of the d
         return false;
     }
 
-    /*Multiple Poses move Function*/
+    /*Multiple Poses move Function
 
     bool move(std::vector<geometry_msgs::msg::Pose> target_poses, const char * log_message = "Moving robot"){
       is_moving = true;
@@ -380,11 +382,10 @@ It takes a single argument, raw_depth, which is a string representation of the d
 
       double eef_step = 0.01; // Rozdzielczość trajektorii
       auto res = move_group_->computeCartesianPath(target_poses, eef_step, 0.0, my_plan.trajectory_);
-      /*Computes the Cartesian path to a series of target poses. Sets eef_step to 0.01. Calls computeCartesianPath with 
-      a vector of target_poses. */
-      RCLCPP_INFO(this->get_logger(), log_message);
+      //Computes the Cartesian path to a series of target poses. Sets eef_step to 0.01. Calls computeCartesianPath with a vector of target_poses. 
+      //RCLCPP_INFO(this->get_logger(), log_message);
 
-      /*Same as the single pose move function, but operates on a series of target poses instead of a single target pose.*/
+      //Same as the single pose move function, but operates on a series of target poses instead of a single target pose.
       if (res != -1) {
         auto move_res = move_group_->execute(my_plan);
           if(move_res == moveit::planning_interface::MoveItErrorCode::SUCCESS){
@@ -400,7 +401,7 @@ It takes a single argument, raw_depth, which is a string representation of the d
         }
         is_moving = false;
         return false;
-    }
+    } */
 
     rclcpp::Subscription<ur_custom_interfaces::msg::URCommand>::SharedPtr subscription_;
     bool is_lookout_position;
@@ -424,7 +425,8 @@ It takes a single argument, raw_depth, which is a string representation of the d
     moveit::planning_interface::MoveGroupInterface* move_group_;
     geometry_msgs::msg::Pose target_pose; /*Represents the target pose (position and orientation) the robot should move to.*/
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher;
-    std::vector<geometry_msgs::msg::Pose> waypoints;  /*A vector of poses representing waypoints. These are used for moving 
+    std::vector<geometry_msgs::msg::Pose> waypoints; 
+    /*A vector of poses representing waypoints. These are used for moving 
     the robot through a sequence of positions.*/
 };
 
@@ -432,22 +434,22 @@ int main(int argc, char * argv[])
 {
 
     geometry_msgs::msg::Pose lookout_pos;
-  lookout_pos.orientation.w = -0.0129;
-  lookout_pos.orientation.x = 0.9970;
-  lookout_pos.orientation.y = -0.0640;
-  lookout_pos.orientation.z = 0.0399;
-  lookout_pos.position.x = 0.7653;
-  lookout_pos.position.y = -0.2525;
-  lookout_pos.position.z = 0.6520;
+  lookout_pos.orientation.w = -0.0095;
+  lookout_pos.orientation.x = 0.9965;
+  lookout_pos.orientation.y = -0.0811;
+  lookout_pos.orientation.z = 0.0135;
+  lookout_pos.position.x = 0.7925;
+  lookout_pos.position.y = -0.1295;
+  lookout_pos.position.z = 0.6553;
 
     geometry_msgs::msg::Pose item_drop_pos;
-  item_drop_pos.orientation.w = -0.0129;
-  item_drop_pos.orientation.x = 0.9970;
-  item_drop_pos.orientation.y = -0.0638;
-  item_drop_pos.orientation.z = 0.0398;
-  item_drop_pos.position.x = 0.7955;
-  item_drop_pos.position.y = -0.0167;
-  item_drop_pos.position.z = 0.6591;
+  item_drop_pos.orientation.w = -0.0094;
+  item_drop_pos.orientation.x = 0.9965;
+  item_drop_pos.orientation.y = -0.0811;
+  item_drop_pos.orientation.z = 0.0134;
+  item_drop_pos.position.x = 0.8257;
+  item_drop_pos.position.y = 0.0730;
+  item_drop_pos.position.z = 0.6597;
 
 
   rclcpp::init(argc, argv); /*initializes the ROS 2 system with command-line arguments.*/
